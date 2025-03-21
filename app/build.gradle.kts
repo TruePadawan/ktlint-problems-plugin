@@ -28,5 +28,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.example.AppKt"
+    mainClass = "com.github.truepadawan.ktlint.problems.sample.AppKt"
 }
