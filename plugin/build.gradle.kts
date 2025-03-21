@@ -23,6 +23,9 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    compileOnly("com.pinterest.ktlint:ktlint-rule-engine:1.5.0")
+    compileOnly("com.pinterest.ktlint:ktlint-ruleset-standard:1.5.0")
 }
 
 gradlePlugin {
