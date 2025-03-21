@@ -7,3 +7,4 @@
 
 rootProject.name = "ktlint-problems"
 include("plugin")
+include("app")
