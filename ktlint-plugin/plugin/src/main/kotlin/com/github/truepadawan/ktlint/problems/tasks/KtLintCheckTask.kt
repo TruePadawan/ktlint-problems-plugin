@@ -30,8 +30,15 @@ abstract class KtLintCheckTask : DefaultTask {
         val ktLintInvoker = KtLintInvoker.initialize()
         val kotlinFiles = projectLayout.settingsDirectory.asFileTree.filter { it.extension == "kt" }
         kotlinFiles.forEach {
+            println("Checking ${it.name}")
             val lintErrorResult = ktLintInvoker.invokeLinter(it)
-            reportProblems(lintErrorResult)
+            if (lintErrorResult.errors.isNotEmpty()) {
+                reportProblems(lintErrorResult)
+                println("- Lint error(s) found")
+            } else {
+                println("- No lint error(s) found")
+            }
+            println("----------------------")
         }
     }
 

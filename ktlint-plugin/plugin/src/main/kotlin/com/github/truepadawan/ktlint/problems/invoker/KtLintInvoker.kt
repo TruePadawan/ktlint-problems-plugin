@@ -36,7 +36,6 @@ class KtLintInvoker(
     }
 
     fun invokeLinter(file: File): LintErrorResult {
-        println("Linting file: ${file.name}")
         val errors = mutableListOf<LintError>()
         engine.lint(Code.fromFile(file)) { lintError: LintError ->
             errors.add(lintError)
@@ -45,7 +44,6 @@ class KtLintInvoker(
     }
 
     fun invokeFormatter(file: File): Pair<String, LintErrorResult> {
-        println("Formatting file: ${file.name}")
         val errors = mutableListOf<LintError>()
         val formattedCode =
             engine.format(Code.fromFile(file)) { lintError ->

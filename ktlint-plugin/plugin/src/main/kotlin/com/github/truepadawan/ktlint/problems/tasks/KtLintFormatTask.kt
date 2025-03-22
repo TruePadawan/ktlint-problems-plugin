@@ -30,12 +30,17 @@ abstract class KtLintFormatTask : DefaultTask {
         val ktLintInvoker = KtLintInvoker.initialize()
         val kotlinFiles = projectLayout.settingsDirectory.asFileTree.filter { it.extension == "kt" }
         kotlinFiles.forEach {
+            println("Checking ${it.name}")
             val (formattedCode, lintErrorResult) = ktLintInvoker.invokeFormatter(it)
             reportProblems(lintErrorResult)
             val currentFileContent = it.readText()
             if (currentFileContent != formattedCode) {
                 it.writeText(formattedCode)
+                println("${it.name} was formatted, Lint error(s) found")
+            } else {
+                println("${it.name} wasn't formatted, No lint error(s) found")
             }
+            println("----------------------")
         }
     }
 
