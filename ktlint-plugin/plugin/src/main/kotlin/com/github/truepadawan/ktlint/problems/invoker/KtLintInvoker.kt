@@ -5,10 +5,9 @@ import com.pinterest.ktlint.rule.engine.api.Code
 import com.pinterest.ktlint.rule.engine.api.KtLintRuleEngine
 import com.pinterest.ktlint.rule.engine.api.LintError
 import com.pinterest.ktlint.rule.engine.core.api.RuleProvider
-import com.pinterest.ktlint.ruleset.standard.rules.IndentationRule
 import java.io.File
-import java.util.ServiceConfigurationError
 import java.util.ServiceLoader
+import java.util.ServiceConfigurationError
 
 class KtLintInvoker(private val engine: KtLintRuleEngine) {
     companion object Factory {
