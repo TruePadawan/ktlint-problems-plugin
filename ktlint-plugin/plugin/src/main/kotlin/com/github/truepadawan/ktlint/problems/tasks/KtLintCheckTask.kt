@@ -1,12 +1,20 @@
 package com.github.truepadawan.ktlint.problems.tasks
 
+import com.github.truepadawan.ktlint.problems.KtlintProblemsPlugin
 import com.github.truepadawan.ktlint.problems.invoker.KtLintInvoker
+import com.github.truepadawan.ktlint.problems.invoker.LintErrorResult
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ProjectLayout
+import org.gradle.api.problems.ProblemId
+import org.gradle.api.problems.Problems
+import org.gradle.api.problems.Severity
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
 abstract class KtLintCheckTask @Inject constructor(private var projectLayout: ProjectLayout) : DefaultTask() {
+    @get:Inject
+    abstract val problems: Problems
+
     /*
     * Run the linter on all kotlin files in the project and report errors via Problems API
     * */
@@ -16,7 +24,19 @@ abstract class KtLintCheckTask @Inject constructor(private var projectLayout: Pr
         val kotlinFiles = projectLayout.settingsDirectory.asFileTree.filter { it.extension == "kt" }
         kotlinFiles.forEach {
             val lintErrorResult = ktLintInvoker.invokeLinter(it)
+            if (lintErrorResult.errors.isNotEmpty()) {
+                reportProblems(lintErrorResult)
+            }
+        }
+    }
 
+    private fun reportProblems(lintErrorResult: LintErrorResult) {
+        val (file, errors) = lintErrorResult
+        errors.forEach {
+            val problemId = ProblemId.create(it.ruleId.value, it.detail, KtlintProblemsPlugin.PROBLEM_GROUP)
+            problems.reporter.report(problemId, { problemSpec ->
+                problemSpec.lineInFileLocation(file.path, it.line, it.col).severity(Severity.WARNING)
+            })
         }
     }
 }
