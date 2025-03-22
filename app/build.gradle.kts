@@ -30,5 +30,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "com.github.truepadawan.ktlint.problems.sample.AppKt"
+    mainClass = "io.github.truepadawan.ktlint.problems.sample.AppKt"
 }

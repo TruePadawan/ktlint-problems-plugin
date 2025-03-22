@@ -1,4 +1,4 @@
-package com.github.truepadawan.ktlint.problems.invoker
+package io.github.truepadawan.ktlint.problems.invoker
 
 import com.pinterest.ktlint.cli.ruleset.core.api.RuleSetProviderV3
 import com.pinterest.ktlint.rule.engine.api.Code

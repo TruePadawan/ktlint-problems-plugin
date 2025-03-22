@@ -1,7 +1,7 @@
-package com.github.truepadawan.ktlint.problems
+package io.github.truepadawan.ktlint.problems
 
-import com.github.truepadawan.ktlint.problems.tasks.KtLintCheckTask
-import com.github.truepadawan.ktlint.problems.tasks.KtLintFormatTask
+import io.github.truepadawan.ktlint.problems.tasks.KtLintCheckTask
+import io.github.truepadawan.ktlint.problems.tasks.KtLintFormatTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.problems.ProblemGroup

@@ -38,7 +38,7 @@ gradlePlugin {
     // Define the plugin
     plugins.register("ktlintProblemsPlugin") {
         id = "io.github.truepadawan.ktlint.problems"
-        implementationClass = "com.github.truepadawan.ktlint.problems.KtlintProblemsPlugin"
+        implementationClass = "io.github.truepadawan.ktlint.problems.KtlintProblemsPlugin"
         displayName = "Ktlint Gradle Problems API plugin"
         description = "This plugin reports Ktlint lint errors through Gradle's Problems API"
         tags = listOf("ktlint", "problems-api", "code-formatting", "linter")

@@ -1,8 +1,8 @@
-package com.github.truepadawan.ktlint.problems.tasks
+package io.github.truepadawan.ktlint.problems.tasks
 
-import com.github.truepadawan.ktlint.problems.KtlintProblemsPlugin
-import com.github.truepadawan.ktlint.problems.invoker.KtLintInvoker
-import com.github.truepadawan.ktlint.problems.invoker.LintErrorResult
+import io.github.truepadawan.ktlint.problems.KtlintProblemsPlugin
+import io.github.truepadawan.ktlint.problems.invoker.KtLintInvoker
+import io.github.truepadawan.ktlint.problems.invoker.LintErrorResult
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.problems.ProblemId
@@ -11,8 +11,8 @@ import org.gradle.api.problems.Severity
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
-abstract class KtLintFormatTask : DefaultTask {
-    private val projectLayout: ProjectLayout
+abstract class KtLintCheckTask : DefaultTask {
+    private var projectLayout: ProjectLayout
 
     @Inject
     constructor(projectLayout: ProjectLayout) : super() {
@@ -23,7 +23,7 @@ abstract class KtLintFormatTask : DefaultTask {
     abstract val problems: Problems
 
     /*
-     * Run the formatter on all kotlin files in the project and report lint errors via Problems API
+     * Run the linter on all kotlin files in the project and report lint errors via Problems API
      * */
     @TaskAction
     fun action() {
@@ -31,14 +31,12 @@ abstract class KtLintFormatTask : DefaultTask {
         val kotlinFiles = projectLayout.settingsDirectory.asFileTree.filter { it.extension == "kt" }
         kotlinFiles.forEach {
             println("Checking ${it.name}")
-            val (formattedCode, lintErrorResult) = ktLintInvoker.invokeFormatter(it)
-            reportProblems(lintErrorResult)
-            val currentFileContent = it.readText()
-            if (currentFileContent != formattedCode) {
-                it.writeText(formattedCode)
-                println("${it.name} was formatted, Lint error(s) found")
+            val lintErrorResult = ktLintInvoker.invokeLinter(it)
+            if (lintErrorResult.errors.isNotEmpty()) {
+                reportProblems(lintErrorResult)
+                println("- Lint error(s) found")
             } else {
-                println("${it.name} wasn't formatted, No lint error(s) found")
+                println("- No lint error(s) found")
             }
             println("----------------------")
         }
