@@ -4,20 +4,10 @@ import com.github.truepadawan.ktlint.problems.tasks.KtLintCheckTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.problems.ProblemGroup
-import org.gradle.api.problems.ProblemReporter
-import org.gradle.api.problems.Problems
-import javax.inject.Inject
 
 class KtlintProblemsPlugin : Plugin<Project> {
     companion object {
-        val PROBLEM_GROUP = ProblemGroup.create("ktlintProblems", "KtLint Problems Plugin")
-    }
-
-    private val problemReporter: ProblemReporter
-
-    @Inject
-    constructor(problems: Problems) {
-        problemReporter = problems.reporter
+        val PROBLEM_GROUP: ProblemGroup = ProblemGroup.create("ktlintProblems", "KtLint Problems Plugin")
     }
 
     override fun apply(project: Project) {
