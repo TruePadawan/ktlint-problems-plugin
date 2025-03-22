@@ -12,7 +12,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
 
-    id("com.github.truepadawan.ktlint.problems")
+    id("io.github.truepadawan.ktlint.problems")
 }
 
 repositories {

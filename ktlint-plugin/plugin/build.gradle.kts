@@ -6,15 +6,11 @@
  */
 
 plugins {
-    // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
-    `java-gradle-plugin`
-
     // Apply the Kotlin JVM plugin to add support for Kotlin.
     alias(libs.plugins.kotlin.jvm)
 
-    `maven-publish`
     id("com.autonomousapps.dependency-analysis")
-
+    id("com.gradle.plugin-publish") version "1.3.1"
 }
 
 repositories {
@@ -32,29 +28,20 @@ dependencies {
     implementation("com.pinterest.ktlint:ktlint-ruleset-standard:1.5.0")
 }
 
+group = "io.github.truepadawan"
+version = "1.0.0"
+
 gradlePlugin {
+    website = "https://github.com/TruePadawan/ktlint-problems-plugin"
+    vcsUrl = "https://github.com/TruePadawan/ktlint-problems-plugin"
+
     // Define the plugin
-    plugins.register("ktlintProblems") {
-        id = "com.github.truepadawan.ktlint.problems"
+    plugins.register("ktlintProblemsPlugin") {
+        id = "io.github.truepadawan.ktlint.problems"
         implementationClass = "com.github.truepadawan.ktlint.problems.KtlintProblemsPlugin"
         displayName = "Ktlint Gradle Problems API plugin"
         description = "This plugin reports Ktlint lint errors through Gradle's Problems API"
-    }
-}
-
-publishing {
-    repositories {
-        maven {
-            url = uri(layout.buildDirectory.dir("maven-repo"))
-        }
-    }
-    publications {
-        register<MavenPublication>("ktlintProblems") {
-            groupId = "com.github.truepadawan"
-            artifactId = "ktlint.problems"
-            version = "1.0.0-SNAPSHOT"
-            from(components["kotlin"])
-        }
+        tags = listOf("ktlint", "problems-api", "code-formatting", "linter")
     }
 }
 
