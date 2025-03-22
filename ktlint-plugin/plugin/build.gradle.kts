@@ -13,6 +13,8 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
 
     `maven-publish`
+    id("com.autonomousapps.dependency-analysis")
+
 }
 
 repositories {
@@ -26,8 +28,8 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    compileOnly("com.pinterest.ktlint:ktlint-rule-engine:1.5.0")
-    compileOnly("com.pinterest.ktlint:ktlint-ruleset-standard:1.5.0")
+    implementation("com.pinterest.ktlint:ktlint-rule-engine:1.5.0")
+    implementation("com.pinterest.ktlint:ktlint-ruleset-standard:1.5.0")
 }
 
 gradlePlugin {
