@@ -1,5 +1,6 @@
 package com.github.truepadawan.ktlint.problems.tasks
 
+import com.github.truepadawan.ktlint.problems.invoker.KtLintInvoker
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.tasks.TaskAction
@@ -11,9 +12,11 @@ abstract class KtLintCheckTask @Inject constructor(private var projectLayout: Pr
     * */
     @TaskAction
     fun action() {
+        val ktLintInvoker = KtLintInvoker.initialize()
         val kotlinFiles = projectLayout.settingsDirectory.asFileTree.filter { it.extension == "kt" }
         kotlinFiles.forEach {
-            println("Kotlin File: ${it.name}")
+            val lintErrorResult = ktLintInvoker.invokeLinter(it)
+
         }
     }
 }
