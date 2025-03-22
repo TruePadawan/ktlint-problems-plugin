@@ -11,6 +11,8 @@ plugins {
 
     // Apply the Kotlin JVM plugin to add support for Kotlin.
     alias(libs.plugins.kotlin.jvm)
+
+    `maven-publish`
 }
 
 repositories {
@@ -38,26 +40,21 @@ gradlePlugin {
     }
 }
 
-// Add a source set for the functional test suite
-//val functionalTestSourceSet = sourceSets.create("functionalTest") {
-//}
-
-//configurations["functionalTestImplementation"].extendsFrom(configurations["testImplementation"])
-//configurations["functionalTestRuntimeOnly"].extendsFrom(configurations["testRuntimeOnly"])
-//
-//// Add a task to run the functional tests
-//val functionalTest by tasks.registering(Test::class) {
-//    testClassesDirs = functionalTestSourceSet.output.classesDirs
-//    classpath = functionalTestSourceSet.runtimeClasspath
-//    useJUnitPlatform()
-//}
-//
-//gradlePlugin.testSourceSets.add(functionalTestSourceSet)
-//
-//tasks.named<Task>("check") {
-//    // Run the functional tests as part of `check`
-//    dependsOn(functionalTest)
-//}
+publishing {
+    repositories {
+        maven {
+            url = uri(layout.buildDirectory.dir("maven-repo"))
+        }
+    }
+    publications {
+        register<MavenPublication>("ktlintProblems") {
+            groupId = "com.github.truepadawan"
+            artifactId = "ktlint.problems"
+            version = "1.0.0-SNAPSHOT"
+            from(components["kotlin"])
+        }
+    }
+}
 
 tasks.named<Test>("test") {
     // Use JUnit Jupiter for unit tests.
