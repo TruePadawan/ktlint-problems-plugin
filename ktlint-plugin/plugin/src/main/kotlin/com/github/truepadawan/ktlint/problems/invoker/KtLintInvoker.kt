@@ -4,12 +4,15 @@ import com.pinterest.ktlint.cli.ruleset.core.api.RuleSetProviderV3
 import com.pinterest.ktlint.rule.engine.api.Code
 import com.pinterest.ktlint.rule.engine.api.KtLintRuleEngine
 import com.pinterest.ktlint.rule.engine.api.LintError
+import com.pinterest.ktlint.rule.engine.core.api.AutocorrectDecision
 import com.pinterest.ktlint.rule.engine.core.api.RuleProvider
 import java.io.File
-import java.util.ServiceLoader
 import java.util.ServiceConfigurationError
+import java.util.ServiceLoader
 
-class KtLintInvoker(private val engine: KtLintRuleEngine) {
+class KtLintInvoker(
+    private val engine: KtLintRuleEngine,
+) {
     companion object Factory {
         fun initialize(): KtLintInvoker {
             val ruleProviders = loadRuleSetsFromClassPath()
@@ -19,9 +22,11 @@ class KtLintInvoker(private val engine: KtLintRuleEngine) {
 
         private fun loadRuleSetsFromClassPath(): Set<RuleProvider> {
             try {
-                return ServiceLoader.load(RuleSetProviderV3::class.java).flatMap {
-                    it.getRuleProviders()
-                }.toSet()
+                return ServiceLoader
+                    .load(RuleSetProviderV3::class.java)
+                    .flatMap {
+                        it.getRuleProviders()
+                    }.toSet()
             } catch (e: ServiceConfigurationError) {
                 println("Error while loading rulesets")
                 println(e.printStackTrace())
@@ -38,6 +43,24 @@ class KtLintInvoker(private val engine: KtLintRuleEngine) {
         }
         return LintErrorResult(file, errors)
     }
+
+    fun invokeFormatter(file: File): Pair<String, LintErrorResult> {
+        println("Formatting file: ${file.name}")
+        val errors = mutableListOf<LintError>()
+        val formattedCode =
+            engine.format(Code.fromFile(file)) { lintError ->
+                errors.add(lintError)
+                if (lintError.canBeAutoCorrected) {
+                    AutocorrectDecision.ALLOW_AUTOCORRECT
+                } else {
+                    AutocorrectDecision.NO_AUTOCORRECT
+                }
+            }
+        return formattedCode to LintErrorResult(file, errors)
+    }
 }
 
-data class LintErrorResult(val file: File, val errors: List<LintError>)
+data class LintErrorResult(
+    val file: File,
+    val errors: List<LintError>,
+)
