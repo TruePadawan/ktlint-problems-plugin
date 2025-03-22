@@ -11,22 +11,27 @@ import org.gradle.api.problems.Severity
 import org.gradle.api.tasks.TaskAction
 import javax.inject.Inject
 
-abstract class KtLintCheckTask @Inject constructor(private var projectLayout: ProjectLayout) : DefaultTask() {
+abstract class KtLintCheckTask : DefaultTask {
+    private var projectLayout: ProjectLayout
+
+    @Inject
+    constructor(projectLayout: ProjectLayout) : super() {
+        this.projectLayout = projectLayout
+    }
+
     @get:Inject
     abstract val problems: Problems
 
     /*
-    * Run the linter on all kotlin files in the project and report errors via Problems API
-    * */
+     * Run the linter on all kotlin files in the project and report lint errors via Problems API
+     * */
     @TaskAction
     fun action() {
         val ktLintInvoker = KtLintInvoker.initialize()
         val kotlinFiles = projectLayout.settingsDirectory.asFileTree.filter { it.extension == "kt" }
         kotlinFiles.forEach {
             val lintErrorResult = ktLintInvoker.invokeLinter(it)
-            if (lintErrorResult.errors.isNotEmpty()) {
-                reportProblems(lintErrorResult)
-            }
+            reportProblems(lintErrorResult)
         }
     }
 
