@@ -11,6 +11,7 @@ plugins {
 
     id("com.autonomousapps.dependency-analysis")
     id("com.gradle.plugin-publish") version "1.3.1"
+    `maven-publish`
 }
 
 repositories {
@@ -24,8 +25,13 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    implementation("com.pinterest.ktlint:ktlint-rule-engine:1.5.0")
-    implementation("com.pinterest.ktlint:ktlint-ruleset-standard:1.5.0")
+    api("com.pinterest.ktlint:ktlint-rule-engine:1.5.0")
+    runtimeOnly("com.pinterest.ktlint:ktlint-ruleset-standard:1.5.0")
+
+
+    implementation("com.pinterest.ktlint:ktlint-cli-ruleset-core:1.5.0")
+    implementation("com.pinterest.ktlint:ktlint-rule-engine-core:1.5.0")
+
 }
 
 group = "io.github.truepadawan"
@@ -42,6 +48,23 @@ gradlePlugin {
         displayName = "Ktlint Gradle Problems API plugin"
         description = "This plugin reports Ktlint lint errors through Gradle's Problems API"
         tags = listOf("ktlint", "problems-api", "code-formatting", "linter")
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("ktlintProblemsPlugin") {
+            groupId = project.group.toString()
+            artifactId = "ktlint.problems"
+            version = project.version.toString()
+
+            from(components["kotlin"])
+        }
+    }
+    repositories {
+        maven {
+            url = uri("${System.getProperty("user.home")}/.m2/repository") // Maven local repository path
+        }
     }
 }
 
