@@ -28,7 +28,7 @@ abstract class KtLintFormatTask : DefaultTask {
     @TaskAction
     fun action() {
         val ktLintInvoker = KtLintInvoker.initialize()
-        val kotlinFiles = projectLayout.settingsDirectory.asFileTree.filter { it.extension == "kt" }
+        val kotlinFiles = projectLayout.projectDirectory.asFileTree.filter { it.extension == "kt" }
         kotlinFiles.forEach {
             println("Checking ${it.name}")
             val (formattedCode, lintErrorResult) = ktLintInvoker.invokeFormatter(it)
