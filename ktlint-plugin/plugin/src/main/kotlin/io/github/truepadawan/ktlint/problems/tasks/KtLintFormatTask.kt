@@ -50,9 +50,9 @@ abstract class KtLintFormatTask : DefaultTask {
         val (file, errors) = lintErrorResult
         errors.forEach {
             val problemId = ProblemId.create(it.ruleId.value, it.detail, KtlintProblemsPlugin.PROBLEM_GROUP)
-            problems.reporter.report(problemId, { problemSpec ->
+            problems.reporter.report(problemId) { problemSpec ->
                 problemSpec.lineInFileLocation(file.path, it.line, it.col).severity(Severity.WARNING)
-            })
+            }
         }
     }
 }
