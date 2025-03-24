@@ -35,7 +35,7 @@ dependencies {
 }
 
 group = "io.github.truepadawan"
-version = "1.0.0"
+version = "1.0.1"
 
 gradlePlugin {
     website = "https://github.com/TruePadawan/ktlint-problems-plugin"
