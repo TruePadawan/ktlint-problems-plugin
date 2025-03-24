@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package io.github.truepadawan.ktlint.problems.tasks
 
 import io.github.truepadawan.ktlint.problems.KtlintProblemsPlugin
