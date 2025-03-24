@@ -5,7 +5,6 @@ package io.github.truepadawan.ktlint.problems.sample
 
 class Person(
     var name: String,
-    var age: Int = 0,
 ) {
     fun greeting(): String = "Hello, My name is $name. Nice to meet you"
 }
