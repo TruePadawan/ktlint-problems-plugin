@@ -32,3 +32,7 @@ application {
     // Define the main class for the application.
     mainClass = "io.github.truepadawan.ktlint.problems.sample.AppKt"
 }
+
+tasks.named("build") {
+    dependsOn("ktlintCheck")
+}
